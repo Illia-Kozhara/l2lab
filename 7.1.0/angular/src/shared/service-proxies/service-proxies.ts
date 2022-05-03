@@ -13,6 +13,7 @@ import { Injectable, Inject, Optional, InjectionToken } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpResponse, HttpResponseBase } from '@angular/common/http';
 
 import * as moment from 'moment';
+import { DatePipe } from '@angular/common';
 
 export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');
 
@@ -1225,6 +1226,64 @@ export class UserServiceProxy {
     }
 
     /**
+     * >>>>>>
+     * L2Test part
+     * @param body (optional) 
+     * @return Success
+     */
+    sendMSG(body: SendMessageDto | undefined): Observable<UserDto> {
+        let url_ = this.baseUrl + "/api/services/app/Messages/TakeMMSG";
+        url_ = url_.replace(/[?&]$/, "");
+
+        const content_ = JSON.stringify(body);
+
+        let options_: any = {
+            body: content_,
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Content-Type": "application/json-patch+json",
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_: any) => {
+            return this.processCreate(response_);
+        })).pipe(_observableCatch((response_: any) => {
+            if (response_ instanceof HttpResponseBase) {
+                try {
+                    return this.processCreate(<any>response_);
+                } catch (e) {
+                    return <Observable<UserDto>><any>_observableThrow(e);
+                }
+            } else
+                return <Observable<UserDto>><any>_observableThrow(response_);
+        }));
+    }
+
+    protected processSendMSG(response: HttpResponseBase): Observable<UserDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+                (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); } }
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+                let result200: any = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = UserDto.fromJS(resultData200);
+                return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<UserDto>(<any>null);
+    }
+
+    /**
      * @param body (optional) 
      * @return Success
      */
@@ -2262,6 +2321,50 @@ export interface ICreateTenantDto {
     connectionString: string | undefined;
     isActive: boolean;
 }
+//L2Task part
+export class SendMessageDto implements ISendMessageDto {
+    msgText: string;
+    
+
+    constructor(data?: ISendMessageDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.msgText = _data["msg"];
+        }
+    }
+
+    static fromJS(data: any): SendMessageDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new SendMessageDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["msg"] = this.msgText;
+    }
+
+
+    clone(): SendMessageDto {
+        const json = this.toJSON();
+        let result = new SendMessageDto();
+        result.init(json);
+        return result;
+    }
+}
+export interface ISendMessageDto {
+    msgText: string;
+    
+}
 
 export class CreateUserDto implements ICreateUserDto {
     userName: string;
@@ -2319,6 +2422,7 @@ export class CreateUserDto implements ICreateUserDto {
         data["password"] = this.password;
         return data; 
     }
+
 
     clone(): CreateUserDto {
         const json = this.toJSON();
@@ -3573,6 +3677,8 @@ export interface ITenantLoginInfoDto {
     name: string | undefined;
 }
 
+
+//Аунтификация
 export class UserDto implements IUserDto {
     id: number;
     userName: string;

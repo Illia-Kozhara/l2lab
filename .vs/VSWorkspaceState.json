@@ -1,6 +1,9 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\7.1.0",
+    "\\7.1.0\\aspnet-core"
   ],
+  "SelectedNode": "\\7.1.0\\aspnet-core\\L2Lab.sln",
   "PreviewInSolutionExplorer": false
 }

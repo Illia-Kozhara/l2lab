@@ -14,6 +14,11 @@ import { ServiceProxyModule } from '@shared/service-proxies/service-proxy.module
 import { SharedModule } from '@shared/shared.module';
 import { HomeComponent } from '@app/home/home.component';
 import { AboutComponent } from '@app/about/about.component';
+// study
+import { L2TaskComponent } from '@app/L2Task/L2Task.component';
+import { EditPannelComponent } from '@app/L2Task/edit-pannel.component';
+
+
 // tenants
 import { TenantsComponent } from '@app/tenants/tenants.component';
 import { CreateTenantDialogComponent } from './tenants/create-tenant/create-tenant-dialog.component';
@@ -39,11 +44,15 @@ import { SidebarLogoComponent } from './layout/sidebar-logo.component';
 import { SidebarUserPanelComponent } from './layout/sidebar-user-panel.component';
 import { SidebarMenuComponent } from './layout/sidebar-menu.component';
 
+
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     AboutComponent,
+    // study
+    L2TaskComponent,
+    EditPannelComponent,
     // tenants
     TenantsComponent,
     CreateTenantDialogComponent,
@@ -67,7 +76,8 @@ import { SidebarMenuComponent } from './layout/sidebar-menu.component';
     SidebarComponent,
     SidebarLogoComponent,
     SidebarUserPanelComponent,
-    SidebarMenuComponent
+    SidebarMenuComponent,
+    
   ],
   imports: [
     CommonModule,

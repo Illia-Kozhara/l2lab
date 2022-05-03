@@ -1,0 +1,47 @@
+<div [@routerTransition]>
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <h1>{{"About" | localize}}</h1>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="content px-2">
+        <div class="container-fluid">
+            <div class="card">
+                <style>
+                    .l2testcard {
+                        background: #fc3; /* Цвет фона */
+                        border: 2px solid black; /* Параметры рамки */
+                        padding: 20px; /* Поля вокруг текста */
+                    }
+                </style>
+                <div class="l2testcard">
+                    <h3>
+                        {{uMSG}}
+                    </h3>
+                    <div class="col-md-9"
+                         style="margin:7px">
+                        <input type="text"
+                               class="form-control"
+                               required
+                               maxlength="32"
+                               [(ngModel)]="mMsgDTO.msgText"
+                               #nameModel="ngModel"
+                               #nameEl />
+                    </div>
+                    <button type="button"
+                            (click)="sendMSGEvent()">
+                        Send >>>
+                    </button>
+                    <h2>
+                        {{getstartedEV}}
+                    </h2>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+

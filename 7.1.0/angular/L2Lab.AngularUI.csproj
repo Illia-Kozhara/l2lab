@@ -12,6 +12,7 @@
   <ItemGroup>
     <Compile Remove="dist" />
     <None Include="app.config" />
+    <PackageReference Include="AngularJS.Core" Version="1.8.2" />
     <None Update="wwwroot\**\*;web.config">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </None>
