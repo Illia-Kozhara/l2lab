@@ -2,8 +2,11 @@
   "ExpandedNodes": [
     "",
     "\\7.1.0",
-    "\\7.1.0\\aspnet-core"
+    "\\7.1.0\\aspnet-core",
+    "\\7.1.0\\aspnet-core\\src",
+    "\\7.1.0\\aspnet-core\\src\\L2Lab.EntityFrameworkCore",
+    "\\7.1.0\\aspnet-core\\src\\L2Lab.EntityFrameworkCore\\EntityFrameworkCore"
   ],
-  "SelectedNode": "\\7.1.0\\aspnet-core\\L2Lab.sln",
+  "SelectedNode": "\\7.1.0\\aspnet-core\\src\\L2Lab.EntityFrameworkCore\\EntityFrameworkCore\\L2LabDbContext.cs",
   "PreviewInSolutionExplorer": false
 }

@@ -20,6 +20,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json.Serialization;
 using System.IO;
+using Abp.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
 namespace L2Lab.Web.Host.Startup
 {
@@ -87,6 +89,12 @@ namespace L2Lab.Web.Host.Startup
                     )
                 )
             );
+
+            /*//L2Task!!
+            services.AddAbpDbContext<EntityFrameworkCore.L2LabMessagesDbContext>(options =>
+            {
+                options.DbContextOptions.UseSqlServer(options.ConnectionString);
+            });*/
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)

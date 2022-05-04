@@ -39,14 +39,14 @@ export class L2TaskComponent extends AppComponentBase {
     sendMSGEvent() {
 
         //try to post
-        /*this._userService.sendMSG(this.mMsgDTO).subscribe(
+        this._userService.sendMSG(this.mMsgDTO).subscribe(
             () => {
                 this.notify.info(this.l('SavedSuccessfully'));
             },
             () => {
                 this.getstartedEV = "false";
             }
-        );;*/
+        );
 
         this.uMSG = this.mMsgDTO.msgText;
         return this.uMSG;

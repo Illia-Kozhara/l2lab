@@ -23,7 +23,7 @@ namespace L2Lab.EntityFrameworkCore
                 Configuration.Modules.AbpEfCore().AddDbContext<L2LabDbContext>(options =>
                 {
                     if (options.ExistingConnection != null)
-                    {
+                    {   
                         L2LabDbContextConfigurer.Configure(options.DbContextOptions, options.ExistingConnection);
                     }
                     else
