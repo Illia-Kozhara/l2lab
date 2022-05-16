@@ -1,5 +1,7 @@
 ﻿using Abp.Application.Services;
 using Abp.Domain.Repositories;
+using L2Lab.EntityFrameworkCore;
+using L2Lab.EntityFrameworkCore.Repositories;
 using L2Lab.Messages.Dto;
 using System;
 using System.Collections.Generic;
@@ -9,19 +11,24 @@ using System.Threading.Tasks;
 
 namespace L2Lab.Messages
 {
-    public class MessageAppService 
+    public class MessageAppService : AsyncCrudAppService<L2LabMessage, L2LabMessageDto>, IMessageAppService
     {
-        /*private readonly IRepository<L2Message> _messagesRepository;
+        private readonly IRepository<L2LabMessage> _l2LabRepository;
 
-        public MessageAppService(IRepository<L2Message> messagesRepository)
+        public MessageAppService(IRepository<L2LabMessage> l2LabRepository)
+            : base(l2LabRepository)
         {
-            _messagesRepository = messagesRepository;
+            this._l2LabRepository = l2LabRepository;
+            //_l2LabRepository = l2LabRepository;
         }
-        public void SendMSG(CreateMessageInput input)
-        {
-           var msg = new L2Message{ TextMSG = input };
-            _messagesRepository.Insert(msg);
-        }*/
-    }
 
+        public void AddMessage(CreateMessageInput input)
+        {
+            //just example
+            //var msg = ObjectMapper.Map<L2LabMessage>(input);
+            var message = new L2LabMessage { MSGText = input.MsgText };
+            _l2LabRepository.Insert(message);
+        }
+        
+    }
 }

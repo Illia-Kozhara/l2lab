@@ -16,7 +16,7 @@ import { HomeComponent } from '@app/home/home.component';
 import { AboutComponent } from '@app/about/about.component';
 // study
 import { L2TaskComponent } from '@app/L2Task/L2Task.component';
-import { EditPannelComponent } from '@app/L2Task/edit-pannel.component';
+
 
 
 // tenants
@@ -52,7 +52,6 @@ import { SidebarMenuComponent } from './layout/sidebar-menu.component';
     AboutComponent,
     // study
     L2TaskComponent,
-    EditPannelComponent,
     // tenants
     TenantsComponent,
     CreateTenantDialogComponent,

@@ -25,6 +25,8 @@ namespace L2Lab
             Configuration.Modules.Zero().EntityTypes.Tenant = typeof(Tenant);
             Configuration.Modules.Zero().EntityTypes.Role = typeof(Role);
             Configuration.Modules.Zero().EntityTypes.User = typeof(User);
+            //WTF
+
 
             L2LabLocalizationConfigurer.Configure(Configuration.Localization);
 

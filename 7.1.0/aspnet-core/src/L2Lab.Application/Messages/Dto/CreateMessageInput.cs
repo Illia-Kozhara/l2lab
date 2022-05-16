@@ -8,6 +8,5 @@ using System.Threading.Tasks;
 public class CreateMessageInput
 {
     [Required]
-    public string MSG { get; set; }
-
+    public string MsgText { get; set; }
 }

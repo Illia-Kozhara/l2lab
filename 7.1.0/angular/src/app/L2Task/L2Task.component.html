@@ -27,8 +27,8 @@
                         <input type="text"
                                class="form-control"
                                required
-                               maxlength="32"
-                               [(ngModel)]="mMsgDTO.msgText"
+                               maxlength="128"
+                               [(ngModel)]="uMSG"
                                #nameModel="ngModel"
                                #nameEl />
                     </div>
@@ -37,7 +37,7 @@
                         Send >>>
                     </button>
                     <h2>
-                        {{getstartedEV}}
+                        {{uMSG}}
                     </h2>
                 </div>
             </div>

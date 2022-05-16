@@ -6,6 +6,7 @@ using Abp.IdentityFramework;
 using Abp.Runtime.Session;
 using L2Lab.Authorization.Users;
 using L2Lab.MultiTenancy;
+using L2Lab.Messages;
 
 namespace L2Lab
 {

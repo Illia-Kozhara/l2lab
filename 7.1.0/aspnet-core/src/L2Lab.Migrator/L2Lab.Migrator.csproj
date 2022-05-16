@@ -18,6 +18,7 @@
     <PackageReference Include="Abp.Castle.Log4Net" Version="7.1.0" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\L2Lab.Application\L2Lab.Application.csproj" />
     <ProjectReference Include="..\L2Lab.Core\L2Lab.Core.csproj" />
     <ProjectReference Include="..\L2Lab.EntityFrameworkCore\L2Lab.EntityFrameworkCore.csproj" />
   </ItemGroup>

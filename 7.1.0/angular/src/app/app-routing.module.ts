@@ -24,7 +24,7 @@ import { L2TaskComponent } from './L2Task/L2Task.component';
                     { path: 'tenants', component: TenantsComponent, data: { permission: 'Pages.Tenants' }, canActivate: [AppRouteGuard] },
                     { path: 'about', component: AboutComponent, canActivate: [AppRouteGuard] },
 
-                    { path: 'L2Task', component: L2TaskComponent, data: { permission: 'Pages.Users' }, canActivate: [AppRouteGuard] },
+                    { path: 'L2Task', component: L2TaskComponent, canActivate: [AppRouteGuard] },
 
                     { path: 'update-password', component: ChangePasswordComponent, canActivate: [AppRouteGuard] }
                 ]

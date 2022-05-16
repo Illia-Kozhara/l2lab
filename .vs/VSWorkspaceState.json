@@ -4,9 +4,12 @@
     "\\7.1.0",
     "\\7.1.0\\aspnet-core",
     "\\7.1.0\\aspnet-core\\src",
+    "\\7.1.0\\aspnet-core\\src\\L2Lab.Application",
+    "\\7.1.0\\aspnet-core\\src\\L2Lab.Application\\Messages",
+    "\\7.1.0\\aspnet-core\\src\\L2Lab.Application\\Users",
     "\\7.1.0\\aspnet-core\\src\\L2Lab.EntityFrameworkCore",
     "\\7.1.0\\aspnet-core\\src\\L2Lab.EntityFrameworkCore\\EntityFrameworkCore"
   ],
-  "SelectedNode": "\\7.1.0\\aspnet-core\\src\\L2Lab.EntityFrameworkCore\\EntityFrameworkCore\\L2LabDbContext.cs",
+  "SelectedNode": "\\7.1.0\\aspnet-core\\src\\L2Lab.Application\\Messages\\MessageAppService.cs",
   "PreviewInSolutionExplorer": false
 }

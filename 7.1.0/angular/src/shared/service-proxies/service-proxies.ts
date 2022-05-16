@@ -14,6 +14,7 @@ import { HttpClient, HttpHeaders, HttpResponse, HttpResponseBase } from '@angula
 
 import * as moment from 'moment';
 import { DatePipe } from '@angular/common';
+import { log } from 'console';
 
 export const API_BASE_URL = new InjectionToken<string>('API_BASE_URL');
 
@@ -1231,11 +1232,12 @@ export class UserServiceProxy {
      * @param body (optional) 
      * @return Success
      */
-    sendMSG(body: SendMessageDto | undefined): Observable<UserDto> {
-        let url_ = this.baseUrl + "/api/services/app/Messages/TakeMMSG";
+    sendMSG(body: SendMessageDto) {
+        let url_ = this.baseUrl + "/api/services/app/Message/AddMessage";
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(body);
+        //console.error(">>>>>>" + content_);
 
         let options_: any = {
             body: content_,
@@ -1247,21 +1249,35 @@ export class UserServiceProxy {
             })
         };
 
-        return this.http.request("post", url_, options_).pipe(_observableMergeMap((response_: any) => {
-            return this.processCreate(response_);
+        return this.http.request("post", url_, options_);
+    }
+    getAllMSG(): Observable<MessageDtoListResultDto> {
+        let url_ = this.baseUrl + "/api/services/app/User/GetAllMessages";
+        url_ = url_.replace(/[?&]$/, "");
+
+        let options_: any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };
+
+        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_: any) => {
+            return this.processGetAllMSG(response_);
         })).pipe(_observableCatch((response_: any) => {
             if (response_ instanceof HttpResponseBase) {
                 try {
-                    return this.processCreate(<any>response_);
+                    return this.processGetAllMSG(<any>response_);
                 } catch (e) {
-                    return <Observable<UserDto>><any>_observableThrow(e);
+                    return <Observable<MessageDtoListResultDto>><any>_observableThrow(e);
                 }
             } else
-                return <Observable<UserDto>><any>_observableThrow(response_);
+                return <Observable<MessageDtoListResultDto>><any>_observableThrow(response_);
         }));
     }
 
-    protected processSendMSG(response: HttpResponseBase): Observable<UserDto> {
+    protected processGetAllMSG(response: HttpResponseBase): Observable<MessageDtoListResultDto> {
         const status = response.status;
         const responseBlob =
             response instanceof HttpResponse ? response.body :
@@ -1272,7 +1288,7 @@ export class UserServiceProxy {
             return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
                 let result200: any = null;
                 let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-                result200 = UserDto.fromJS(resultData200);
+                result200 = MessageDtoListResultDto.fromJS(resultData200);
                 return _observableOf(result200);
             }));
         } else if (status !== 200 && status !== 204) {
@@ -1280,7 +1296,30 @@ export class UserServiceProxy {
                 return throwException("An unexpected server error occurred.", status, _responseText, _headers);
             }));
         }
-        return _observableOf<UserDto>(<any>null);
+        return _observableOf<MessageDtoListResultDto>(<any>null);
+    }
+    // <<<
+
+    protected processSendMSG(response: HttpResponseBase): Observable<SendMessageDto> {
+        const status = response.status;
+        const responseBlob =
+            response instanceof HttpResponse ? response.body :
+                (<any>response).error instanceof Blob ? (<any>response).error : undefined;
+
+        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); } }
+        if (status === 200) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+                let result200: any = null;
+                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
+                result200 = SendMessageDto.fromJS(resultData200);
+                return _observableOf(result200);
+            }));
+        } else if (status !== 200 && status !== 204) {
+            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
+                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
+            }));
+        }
+        return _observableOf<SendMessageDto>(<any>null);
     }
 
     /**
@@ -2323,7 +2362,7 @@ export interface ICreateTenantDto {
 }
 //L2Task part
 export class SendMessageDto implements ISendMessageDto {
-    msgText: string;
+    MsgText: string;
     
 
     constructor(data?: ISendMessageDto) {
@@ -2335,9 +2374,13 @@ export class SendMessageDto implements ISendMessageDto {
         }
     }
 
+    initString(t : string) {
+        this.MsgText = t;
+    }
+
     init(_data?: any) {
         if (_data) {
-            this.msgText = _data["msg"];
+            this.MsgText = _data["msgText"];
         }
     }
 
@@ -2350,7 +2393,8 @@ export class SendMessageDto implements ISendMessageDto {
 
     toJSON(data?: any) {
         data = typeof data === 'object' ? data : {};
-        data["msg"] = this.msgText;
+        data["msgText"] = this.MsgText;
+        return data;
     }
 
 
@@ -2362,7 +2406,7 @@ export class SendMessageDto implements ISendMessageDto {
     }
 }
 export interface ISendMessageDto {
-    msgText: string;
+    MsgText: string;
     
 }
 
@@ -3677,6 +3721,105 @@ export interface ITenantLoginInfoDto {
     name: string | undefined;
 }
 
+//L2Lab task
+export class MessageDto implements IMessageDto {
+    id: number;
+    MsgText: string;
+    
+
+    constructor(data?: MessageDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            this.id = _data["id"];
+            this.MsgText = _data["msgText"];
+        }
+    }
+
+    static fromJS(data: any): MessageDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new MessageDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        data["id"] = this.id;
+        data["msgText"] = this.MsgText;
+        return data;
+    }
+
+    clone(): MessageDto {
+        const json = this.toJSON();
+        let result = new MessageDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IMessageDto {
+    id: number;
+    MsgText: string;
+}
+
+export class MessageDtoListResultDto implements IMessageDtoListResultDto {
+    items: MessageDto[] | undefined;
+
+    constructor(data?: IMessageDtoListResultDto) {
+        if (data) {
+            for (var property in data) {
+                if (data.hasOwnProperty(property))
+                    (<any>this)[property] = (<any>data)[property];
+            }
+        }
+    }
+
+    init(_data?: any) {
+        if (_data) {
+            if (Array.isArray(_data["items"])) {
+                this.items = [] as any;
+                for (let item of _data["items"])
+                    this.items.push(MessageDto.fromJS(item));
+            }
+        }
+    }
+
+    static fromJS(data: any): MessageDtoListResultDto {
+        data = typeof data === 'object' ? data : {};
+        let result = new MessageDtoListResultDto();
+        result.init(data);
+        return result;
+    }
+
+    toJSON(data?: any) {
+        data = typeof data === 'object' ? data : {};
+        if (Array.isArray(this.items)) {
+            data["items"] = [];
+            for (let item of this.items)
+                data["items"].push(item.toJSON());
+        }
+        return data;
+    }
+
+    clone(): MessageDtoListResultDto {
+        const json = this.toJSON();
+        let result = new MessageDtoListResultDto();
+        result.init(json);
+        return result;
+    }
+}
+
+export interface IMessageDtoListResultDto {
+    items: MessageDto[] | undefined;
+}
 
 //Аунтификация
 export class UserDto implements IUserDto {

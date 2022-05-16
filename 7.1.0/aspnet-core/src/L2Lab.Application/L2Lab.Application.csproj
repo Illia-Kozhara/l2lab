@@ -13,5 +13,6 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\L2Lab.Core\L2Lab.Core.csproj" />
+    <ProjectReference Include="..\L2Lab.EntityFrameworkCore\L2Lab.EntityFrameworkCore.csproj" />
   </ItemGroup>
 </Project>

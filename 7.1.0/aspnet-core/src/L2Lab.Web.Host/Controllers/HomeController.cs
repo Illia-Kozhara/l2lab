@@ -6,16 +6,22 @@ using Abp.Notifications;
 using Abp.Timing;
 using Abp.Web.Security.AntiForgery;
 using L2Lab.Controllers;
+using L2Lab.EntityFrameworkCore;
+using L2Lab.Messages;
+using L2Lab.Messages.Dto;
 
 namespace L2Lab.Web.Host.Controllers
 {
     public class HomeController : L2LabControllerBase
     {
         private readonly INotificationPublisher _notificationPublisher;
+        private readonly IMessageAppService _messageSerice;
 
-        public HomeController(INotificationPublisher notificationPublisher)
+
+        public HomeController(INotificationPublisher notificationPublisher, IMessageAppService messageSerice)
         {
             _notificationPublisher = notificationPublisher;
+            _messageSerice = messageSerice;
         }
 
         public IActionResult Index()

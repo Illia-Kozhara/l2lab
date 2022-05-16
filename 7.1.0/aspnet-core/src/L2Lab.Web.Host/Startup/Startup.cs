@@ -22,6 +22,12 @@ using Newtonsoft.Json.Serialization;
 using System.IO;
 using Abp.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Castle.Windsor;
+using Castle.MicroKernel.Registration;
+using Abp.Domain.Repositories;
+using L2Lab.EntityFrameworkCore;
+using L2Lab.EntityFrameworkCore.Repositories;
+using L2Lab.Messages;
 
 namespace L2Lab.Web.Host.Startup
 {
@@ -75,7 +81,7 @@ namespace L2Lab.Web.Host.Startup
                         .AllowCredentials()
                 )
             );
-
+            services.AddMvc();
             // Swagger - Enable this line and the related lines in Configure method to enable swagger UI
             ConfigureSwagger(services);
 
@@ -90,11 +96,7 @@ namespace L2Lab.Web.Host.Startup
                 )
             );
 
-            /*//L2Task!!
-            services.AddAbpDbContext<EntityFrameworkCore.L2LabMessagesDbContext>(options =>
-            {
-                options.DbContextOptions.UseSqlServer(options.ConnectionString);
-            });*/
+            
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, ILoggerFactory loggerFactory)
@@ -111,7 +113,8 @@ namespace L2Lab.Web.Host.Startup
 
             app.UseAbpRequestLocalization();
 
-
+            var container = new WindsorContainer();
+            
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapHub<AbpCommonHub>("/signalr");

@@ -18,6 +18,8 @@ using L2Lab.Authorization;
 using L2Lab.Authorization.Accounts;
 using L2Lab.Authorization.Roles;
 using L2Lab.Authorization.Users;
+using L2Lab.EntityFrameworkCore;
+using L2Lab.Messages;
 using L2Lab.Roles.Dto;
 using L2Lab.Users.Dto;
 using Microsoft.AspNetCore.Identity;
@@ -42,7 +44,8 @@ namespace L2Lab.Users
             IRepository<Role> roleRepository,
             IPasswordHasher<User> passwordHasher,
             IAbpSession abpSession,
-            LogInManager logInManager)
+            LogInManager logInManager,
+            IRepository<L2LabMessage> l2LabRepository)
             : base(repository)
         {
             _userManager = userManager;
@@ -72,7 +75,7 @@ namespace L2Lab.Users
             }
 
             CurrentUnitOfWork.SaveChanges();
-
+            
             return MapToEntityDto(user);
         }
 

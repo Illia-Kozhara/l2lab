@@ -17,11 +17,13 @@
     },
     "L2Lab.AngularUI": {
       "commandName": "Project",
+      "workingDirectory": "E:\\Projects\\Student\\l2lab-abgular-abp\\l2lab\\7.1.0\\angular",
       "launchBrowser": true,
       "launchUrl": "http://localhost:5000",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
-      }
+      },
+      "jsWebView2Debugging": true
     }
   }
 }

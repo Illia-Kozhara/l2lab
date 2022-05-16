@@ -6,6 +6,9 @@ using Abp.Reflection.Extensions;
 using L2Lab.Configuration;
 using L2Lab.EntityFrameworkCore;
 using L2Lab.Migrator.DependencyInjection;
+using L2Lab.Messages;
+using Abp.Dependency;
+using Abp.Domain.Repositories;
 
 namespace L2Lab.Migrator
 {
@@ -40,8 +43,11 @@ namespace L2Lab.Migrator
 
         public override void Initialize()
         {
+            IocManager.Register<IRepository, L2LabMessage>(DependencyLifeStyle.Transient);
+            IocManager.Register<IMessageAppService, MessageAppService>(DependencyLifeStyle.Transient);
             IocManager.RegisterAssemblyByConvention(typeof(L2LabMigratorModule).GetAssembly());
             ServiceCollectionRegistrar.Register(IocManager);
+
         }
     }
 }

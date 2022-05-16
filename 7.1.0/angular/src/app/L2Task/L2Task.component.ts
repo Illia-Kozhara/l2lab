@@ -1,11 +1,13 @@
+import { HttpHeaders, HttpParams } from '@angular/common/http';
 import {
     ChangeDetectionStrategy, Component,
     EventEmitter, Injector, Output
 } from '@angular/core';
+import { HttpClient } from '@aspnet/signalr';
 import { appModuleAnimation } from '@shared/animations/routerTransition';
 import { AppComponentBase } from '@shared/app-component-base';
 import {
-    CreateUserDto, SendMessageDto, UserServiceProxy
+    CreateUserDto, L2LabMessageServiceProxy, SendMessageDto, UserServiceProxy
 } from '@shared/service-proxies/service-proxies';
 import { forEach as _forEach } from 'lodash-es';
 
@@ -26,7 +28,7 @@ export class L2TaskComponent extends AppComponentBase {
     ngOnInit(): void {
         this.uMSG = 'This is jus a basic!';
         //init data
-        this.mMsgDTO.msgText = this.uMSG;
+        
 
     }
 
@@ -37,9 +39,12 @@ export class L2TaskComponent extends AppComponentBase {
     }
 
     sendMSGEvent() {
-
+        //this.mMsgDTO.msgText = this.uMSG;
+        const m = new SendMessageDto();
+        //m.init(this.mMsgDTO);
+        m.initString(this.uMSG);
         //try to post
-        this._userService.sendMSG(this.mMsgDTO).subscribe(
+        this._userService.sendMSG(m).subscribe(
             () => {
                 this.notify.info(this.l('SavedSuccessfully'));
             },
@@ -47,8 +52,6 @@ export class L2TaskComponent extends AppComponentBase {
                 this.getstartedEV = "false";
             }
         );
-
-        this.uMSG = this.mMsgDTO.msgText;
         return this.uMSG;
     }
 }

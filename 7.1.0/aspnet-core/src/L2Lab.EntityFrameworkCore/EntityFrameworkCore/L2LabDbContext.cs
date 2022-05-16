@@ -14,7 +14,7 @@ namespace L2Lab.EntityFrameworkCore
         public L2LabDbContext(DbContextOptions<L2LabDbContext> options)
             : base(options)
         {
-            
+
         }
     }
 }
