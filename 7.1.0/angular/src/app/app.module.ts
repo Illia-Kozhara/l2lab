@@ -17,8 +17,6 @@ import { AboutComponent } from '@app/about/about.component';
 // study
 import { L2TaskComponent } from '@app/L2Task/L2Task.component';
 
-
-
 // tenants
 import { TenantsComponent } from '@app/tenants/tenants.component';
 import { CreateTenantDialogComponent } from './tenants/create-tenant/create-tenant-dialog.component';

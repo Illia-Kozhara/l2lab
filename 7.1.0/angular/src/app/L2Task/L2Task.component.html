@@ -41,11 +41,11 @@
                         Update >>>
                     </button>
 
-                    <h3>Chat History</h3>
+                    <h3>Message History</h3>
                     <div *ngFor='let item of chatHistory'>
-                        <span>{{ item.id }}</span><span> >>>  </span>
-                        <span>{{ item.msgText }}</span><span> >>>  </span>
-                        <span>{{ item.creationTime }}</span><span> >>>  </span>
+                        <span>id: </span><span>{{ item.id }}</span><span> >>>  </span>
+                        <span>Message body: </span><span>{{ item.msgText }}</span><span> >>>  </span>
+                        <span>date: </span><span>{{ item.creationTime }}</span>
                     </div>
                 </div>
             </div>
