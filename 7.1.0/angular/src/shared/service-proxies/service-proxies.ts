@@ -7,10 +7,10 @@
 //----------------------
 // ReSharper disable InconsistentNaming
 
-import { mergeMap as _observableMergeMap, catchError as _observableCatch } from 'rxjs/operators';
-import { Observable, throwError as _observableThrow, of as _observableOf } from 'rxjs';
+import { mergeMap as _observableMergeMap, catchError as _observableCatch, catchError } from 'rxjs/operators';
+import { Observable, throwError as _observableThrow, of as _observableOf, throwError } from 'rxjs';
 import { Injectable, Inject, Optional, InjectionToken } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpResponse, HttpResponseBase } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse, HttpResponseBase } from '@angular/common/http';
 
 import * as moment from 'moment';
 import { DatePipe } from '@angular/common';
@@ -1216,7 +1216,7 @@ export class TokenAuthServiceProxy {
 }
 
 @Injectable()
-export class UserServiceProxy {
+export class L2MessagesServiceProxy {
     private http: HttpClient;
     private baseUrl: string;
     protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
@@ -1225,7 +1225,6 @@ export class UserServiceProxy {
         this.http = http;
         this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
-
     /**
      * >>>>>>
      * L2Test part
@@ -1237,7 +1236,6 @@ export class UserServiceProxy {
         url_ = url_.replace(/[?&]$/, "");
 
         const content_ = JSON.stringify(body);
-        //console.error(">>>>>>" + content_);
 
         let options_: any = {
             body: content_,
@@ -1248,58 +1246,8 @@ export class UserServiceProxy {
                 "Accept": "text/plain"
             })
         };
-
         return this.http.request("post", url_, options_);
     }
-    getAllMSG(): Observable<MessageDtoListResultDto> {
-        let url_ = this.baseUrl + "/api/services/app/User/GetAllMessages";
-        url_ = url_.replace(/[?&]$/, "");
-
-        let options_: any = {
-            observe: "response",
-            responseType: "blob",
-            headers: new HttpHeaders({
-                "Accept": "text/plain"
-            })
-        };
-
-        return this.http.request("get", url_, options_).pipe(_observableMergeMap((response_: any) => {
-            return this.processGetAllMSG(response_);
-        })).pipe(_observableCatch((response_: any) => {
-            if (response_ instanceof HttpResponseBase) {
-                try {
-                    return this.processGetAllMSG(<any>response_);
-                } catch (e) {
-                    return <Observable<MessageDtoListResultDto>><any>_observableThrow(e);
-                }
-            } else
-                return <Observable<MessageDtoListResultDto>><any>_observableThrow(response_);
-        }));
-    }
-
-    protected processGetAllMSG(response: HttpResponseBase): Observable<MessageDtoListResultDto> {
-        const status = response.status;
-        const responseBlob =
-            response instanceof HttpResponse ? response.body :
-                (<any>response).error instanceof Blob ? (<any>response).error : undefined;
-
-        let _headers: any = {}; if (response.headers) { for (let key of response.headers.keys()) { _headers[key] = response.headers.get(key); } }
-        if (status === 200) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-                let result200: any = null;
-                let resultData200 = _responseText === "" ? null : JSON.parse(_responseText, this.jsonParseReviver);
-                result200 = MessageDtoListResultDto.fromJS(resultData200);
-                return _observableOf(result200);
-            }));
-        } else if (status !== 200 && status !== 204) {
-            return blobToText(responseBlob).pipe(_observableMergeMap(_responseText => {
-                return throwException("An unexpected server error occurred.", status, _responseText, _headers);
-            }));
-        }
-        return _observableOf<MessageDtoListResultDto>(<any>null);
-    }
-    // <<<
-
     protected processSendMSG(response: HttpResponseBase): Observable<SendMessageDto> {
         const status = response.status;
         const responseBlob =
@@ -1320,6 +1268,61 @@ export class UserServiceProxy {
             }));
         }
         return _observableOf<SendMessageDto>(<any>null);
+    }
+
+    getAllMSG(): Observable<Root> {
+        let url_ = this.baseUrl + "/api/services/app/Message/GetMessages";
+        url_ = url_.replace(/[?&]$/, "");
+        console.log("!!!>>>  " + url_.toString());
+        
+        /*let options_: any = {
+            observe: "response",
+            responseType: "blob",
+            headers: new HttpHeaders({
+                "Accept": "text/plain"
+            })
+        };*/
+        return this.http.get<Root>(url_).pipe(
+            catchError(this.handleError)); 
+    }
+    private handleError(error: HttpErrorResponse) {
+        if (error.status === 0) {
+            // A client-side or network error occurred. Handle it accordingly.
+            console.error('An error occurred:', error.error);
+        } else {
+            // The backend returned an unsuccessful response code.
+            // The response body may contain clues as to what went wrong.
+            console.error(
+                `Backend returned code ${error.status}, body was: `, error.error);
+        }
+        // Return an observable with a user-facing error message.
+        return throwError(() => new Error('Something bad happened; please try again later.'));
+    }
+}
+export interface Root {
+    result: Result[]
+    targetUrl: any
+    success: boolean
+    error: any
+    unAuthorizedRequest: boolean
+    __abp: boolean
+}
+
+export interface Result {
+    msgText: string
+    creationTime: string
+    id: number
+}
+
+@Injectable()
+export class UserServiceProxy {
+    private http: HttpClient;
+    private baseUrl: string;
+    protected jsonParseReviver: ((key: string, value: any) => any) | undefined = undefined;
+
+    constructor(@Inject(HttpClient) http: HttpClient, @Optional() @Inject(API_BASE_URL) baseUrl?: string) {
+        this.http = http;
+        this.baseUrl = baseUrl !== undefined && baseUrl !== null ? baseUrl : "";
     }
 
     /**
@@ -2405,6 +2408,7 @@ export class SendMessageDto implements ISendMessageDto {
         return result;
     }
 }
+
 export interface ISendMessageDto {
     MsgText: string;
     
@@ -3725,6 +3729,7 @@ export interface ITenantLoginInfoDto {
 export class MessageDto implements IMessageDto {
     id: number;
     MsgText: string;
+    СreationTime: string;
     
 
     constructor(data?: MessageDto) {
@@ -3740,6 +3745,8 @@ export class MessageDto implements IMessageDto {
         if (_data) {
             this.id = _data["id"];
             this.MsgText = _data["msgText"];
+            this.СreationTime = _data["creationTime"];
+
         }
     }
 
@@ -3754,6 +3761,7 @@ export class MessageDto implements IMessageDto {
         data = typeof data === 'object' ? data : {};
         data["id"] = this.id;
         data["msgText"] = this.MsgText;
+        data["creationTime"] = this.MsgText;
         return data;
     }
 
@@ -3768,58 +3776,10 @@ export class MessageDto implements IMessageDto {
 export interface IMessageDto {
     id: number;
     MsgText: string;
+    СreationTime: string;
 }
 
-export class MessageDtoListResultDto implements IMessageDtoListResultDto {
-    items: MessageDto[] | undefined;
 
-    constructor(data?: IMessageDtoListResultDto) {
-        if (data) {
-            for (var property in data) {
-                if (data.hasOwnProperty(property))
-                    (<any>this)[property] = (<any>data)[property];
-            }
-        }
-    }
-
-    init(_data?: any) {
-        if (_data) {
-            if (Array.isArray(_data["items"])) {
-                this.items = [] as any;
-                for (let item of _data["items"])
-                    this.items.push(MessageDto.fromJS(item));
-            }
-        }
-    }
-
-    static fromJS(data: any): MessageDtoListResultDto {
-        data = typeof data === 'object' ? data : {};
-        let result = new MessageDtoListResultDto();
-        result.init(data);
-        return result;
-    }
-
-    toJSON(data?: any) {
-        data = typeof data === 'object' ? data : {};
-        if (Array.isArray(this.items)) {
-            data["items"] = [];
-            for (let item of this.items)
-                data["items"].push(item.toJSON());
-        }
-        return data;
-    }
-
-    clone(): MessageDtoListResultDto {
-        const json = this.toJSON();
-        let result = new MessageDtoListResultDto();
-        result.init(json);
-        return result;
-    }
-}
-
-export interface IMessageDtoListResultDto {
-    items: MessageDto[] | undefined;
-}
 
 //Аунтификация
 export class UserDto implements IUserDto {

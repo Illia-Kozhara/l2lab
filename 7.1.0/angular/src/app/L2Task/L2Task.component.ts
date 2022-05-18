@@ -1,15 +1,12 @@
-import { HttpHeaders, HttpParams } from '@angular/common/http';
 import {
     ChangeDetectionStrategy, Component,
-    EventEmitter, Injector, Output
+    Injector,
+    Input
 } from '@angular/core';
-import { HttpClient } from '@aspnet/signalr';
 import { appModuleAnimation } from '@shared/animations/routerTransition';
 import { AppComponentBase } from '@shared/app-component-base';
-import {
-    CreateUserDto, L2LabMessageServiceProxy, SendMessageDto, UserServiceProxy
-} from '@shared/service-proxies/service-proxies';
-import { forEach as _forEach } from 'lodash-es';
+import { Root, L2MessagesServiceProxy, MessageDto, SendMessageDto, Result } from '@shared/service-proxies/service-proxies';
+import { Observable } from 'rxjs';
 
 
 @Component({
@@ -18,33 +15,35 @@ import { forEach as _forEach } from 'lodash-es';
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class L2TaskComponent extends AppComponentBase {
-
+    
     getstartedEV: string;
     uMSG: string;
-
+    //observable: Observable<Result[]>;
     //tested
     mMsgDTO = new SendMessageDto();
-
-    ngOnInit(): void {
-        this.uMSG = 'This is jus a basic!';
-        //init data
-        
-
-    }
+    chatHistory: Result[] = [];
 
     constructor(
         injector: Injector,
-        public _userService: UserServiceProxy) {
+        public _l2MessageService: L2MessagesServiceProxy) {
         super(injector);
+        
+    }
+
+    ngOnInit(): void {
+        this.getMessageHistory();
+        this.uMSG = 'This is jus a basic!';
+        /*this.observable = Observable.create(observer => {
+            observer.next(this.chatHistory);
+    });
+    this.observable.subscribe(chatHistory => this.chatHistory = chatHistory);*/
     }
 
     sendMSGEvent() {
-        //this.mMsgDTO.msgText = this.uMSG;
         const m = new SendMessageDto();
-        //m.init(this.mMsgDTO);
         m.initString(this.uMSG);
         //try to post
-        this._userService.sendMSG(m).subscribe(
+        this._l2MessageService.sendMSG(m).subscribe(
             () => {
                 this.notify.info(this.l('SavedSuccessfully'));
             },
@@ -52,6 +51,17 @@ export class L2TaskComponent extends AppComponentBase {
                 this.getstartedEV = "false";
             }
         );
+        this.getMessageHistory();
         return this.uMSG;
+    }
+
+    getMessageHistory(){
+        this._l2MessageService.getAllMSG().subscribe(root => {
+            this.chatHistory = root.result; 
+        });
+    }
+    //ToDo>> remove this solution
+    updateHistory() {
+        this.getMessageHistory();
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Abp.Application.Services;
+using Abp.Application.Services.Dto;
 using L2Lab.EntityFrameworkCore;
 using L2Lab.Messages.Dto;
 using System;
@@ -13,5 +14,6 @@ namespace L2Lab.Messages
     {
         void AddMessage(CreateMessageInput input);
         //public Task<L2LabMessageDto> CreateAsync(CreateMessageInput input);
+        Task <List<L2LabMessage>> GetMessages();
     }
 }

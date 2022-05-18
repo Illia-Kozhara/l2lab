@@ -45,7 +45,6 @@ export class SidebarMenuComponent extends AppComponentBase implements OnInit {
         return [
             //study
             new MenuItem(this.l('L2Task'), '/app/L2Task', 'fas fa-info-circle'),
-            //
             new MenuItem(this.l('About'), '/app/about', 'fas fa-info-circle'),
             new MenuItem(this.l('HomePage'), '/app/home', 'fas fa-home'),
             new MenuItem(

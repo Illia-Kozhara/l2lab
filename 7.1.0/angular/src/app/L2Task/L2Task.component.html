@@ -3,7 +3,7 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-12">
-                    <h1>{{"About" | localize}}</h1>
+                    <h1>{{"Messages" | localize}}</h1>
                 </div>
             </div>
         </div>
@@ -36,9 +36,17 @@
                             (click)="sendMSGEvent()">
                         Send >>>
                     </button>
-                    <h2>
-                        {{uMSG}}
-                    </h2>
+                    <button type="button"
+                            (click)="updateHistory()">
+                        Update >>>
+                    </button>
+
+                    <h3>Chat History</h3>
+                    <div *ngFor='let item of chatHistory'>
+                        <span>{{ item.id }}</span><span> >>>  </span>
+                        <span>{{ item.msgText }}</span><span> >>>  </span>
+                        <span>{{ item.creationTime }}</span><span> >>>  </span>
+                    </div>
                 </div>
             </div>
         </div>
