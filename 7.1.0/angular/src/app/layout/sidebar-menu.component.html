@@ -27,18 +27,8 @@
                 {{ item.label }}
             </p>
         </a>
-        <a *ngIf="item.route && item.route.indexOf('http') != 0"
-           class="nav-link"
-           [routerLink]="item.route"
-           [class.active]="item.isActive">
-            <i class="nav-icon {{ item.icon }}"></i>
-            <p>
-                {{ item.label }}
-            </p>
-        </a>
         <a *ngIf="item.route && item.route.indexOf('http') == 0 && !item.children"
            class="nav-link"
-           target="_blank"
            [href]="item.route">
             <i class="nav-icon {{ item.icon }}"></i>
             <p>

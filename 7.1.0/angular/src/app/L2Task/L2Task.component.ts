@@ -27,6 +27,7 @@ export class L2TaskComponent extends AppComponentBase {
         injector: Injector,
         public _l2MessageService: L2MessagesServiceProxy) {
         super(injector);
+        console.log("!!! L2TaskComponent > constructor() >>  ");
         
     }
 

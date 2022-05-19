@@ -13,10 +13,19 @@
             <div class="card">
                 <style>
                     .l2testcard {
-                        border: 2px solid black;
+                        border: 1px solid black;
                         padding: 20px;
                         margin: 10px;
                     }
+                </style>
+                <style>
+                    .l2button {
+                        margin: 10px;
+                        border-radius: 6px;
+                    }
+                        .l2button:hover {
+                            background-color: #e7e7e7;
+                        }
                 </style>
                 <div class="l2testcard">
                     <div class="col-md-9"
@@ -29,11 +38,13 @@
                                #nameModel="ngModel"
                                #nameEl />
                     </div>
-                    <button type="button"
+                    <button class="l2button"
+                            type="button"
                             (click)="sendMSGEvent()">
                         Send >>>
                     </button>
-                    <button type="button"
+                    <button class="l2button"
+                            type="button"
                             (click)="updateHistory()">
                         Update >>>
                     </button>
