@@ -10,6 +10,7 @@ import { RolesComponent } from 'app/roles/roles.component';
 import { ChangePasswordComponent } from './users/change-password/change-password.component';
 
 import { L2TaskComponent } from './L2Task/L2Task.component';
+import { MessageHistoryComponent } from './L2Task/message-history-component/message-history.component';
 
 @NgModule({
     imports: [
@@ -26,6 +27,7 @@ import { L2TaskComponent } from './L2Task/L2Task.component';
 
                     { path: 'L2Task', component: L2TaskComponent, canActivate: [AppRouteGuard] },
 
+                    { path: 'message-history', component: MessageHistoryComponent, canActivate: [AppRouteGuard] },
                     { path: 'update-password', component: ChangePasswordComponent, canActivate: [AppRouteGuard] }
                 ]
             }

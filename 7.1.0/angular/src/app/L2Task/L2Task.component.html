@@ -45,7 +45,7 @@
                     </button>
                     <button class="l2button"
                             type="button"
-                            (click)="updateHistory()">
+                            (click)="update()">
                         Update >>>
                     </button>
                     <div class="l2testcard">
@@ -61,16 +61,10 @@
                                         <th class="w-25">Date</th>
                                     </tr>
                                 </thead>
-                                <tbody *ngFor='let item of chatHistory'>
+                                <tbody *ngFor='let item of history'>
                                     <tr>
-                                        <td>
-                                            <a>
-                                                {{ item.id }}
-                                            </a>
-                                        </td>
-                                        <td>
-                                            {{ item.msgText }}
-                                        </td>
+                                        <td>{{ item.id }}</td>
+                                        <td>{{ item.msgText }}</td>
                                         <td>{{ item.creationTime }}</td>
                                     </tr>
                                 </tbody>
@@ -78,7 +72,7 @@
                         </div>
                     </div>
         
-      
+                    <!--<messae-history-component></messae-history-component>-->
                 </div>
             </div>
         </div>

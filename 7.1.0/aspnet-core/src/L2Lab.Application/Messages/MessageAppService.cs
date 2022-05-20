@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace L2Lab.Messages
 {
+
     public class MessageAppService : AsyncCrudAppService<L2LabMessage, L2LabMessageDto>, IMessageAppService
     {
         private readonly IRepository<L2LabMessage> _l2LabRepository;
@@ -38,6 +39,11 @@ namespace L2Lab.Messages
             var messages = _l2LabRepository.GetAllListAsync();
             return messages;
             //throw new NotImplementedException();
+        }
+        public async Task<ListResultDto<MMessageDto>> GetMessageHistory()
+        {
+            var roles = await _l2LabRepository.GetAllListAsync();
+            return new ListResultDto<MMessageDto>(ObjectMapper.Map<List<MMessageDto>>(roles));
         }
     }
 }

@@ -13,7 +13,7 @@ namespace L2Lab.Messages
     public interface IMessageAppService : IAsyncCrudAppService<L2LabMessageDto>, IApplicationService
     {
         void AddMessage(CreateMessageInput input);
-        //public Task<L2LabMessageDto> CreateAsync(CreateMessageInput input);
+        Task<ListResultDto<MMessageDto>> GetMessageHistory();
         Task <List<L2LabMessage>> GetMessages();
     }
 }

@@ -1,12 +1,14 @@
 import {
     ChangeDetectionStrategy, Component,
     Injector,
-    Input
+
+    OnInit
 } from '@angular/core';
 import { appModuleAnimation } from '@shared/animations/routerTransition';
 import { AppComponentBase } from '@shared/app-component-base';
-import { Root, L2MessagesServiceProxy, MessageDto, SendMessageDto, Result } from '@shared/service-proxies/service-proxies';
-import { Observable } from 'rxjs';
+import { L2MessagesServiceProxy, Result, SendMessageDto } from '@shared/service-proxies/service-proxies';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
+import { finalize } from 'rxjs/operators';
 
 
 @Component({
@@ -14,55 +16,55 @@ import { Observable } from 'rxjs';
     animations: [appModuleAnimation()],
     changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class L2TaskComponent extends AppComponentBase {
+
+export class L2TaskComponent extends AppComponentBase implements OnInit {
     
-    getstartedEV: string;
     uMSG: string;
-    //observable: Observable<Result[]>;
-    //tested
     mMsgDTO = new SendMessageDto();
-    chatHistory: Result[] = [];
+    history: Result[] = [];
 
     constructor(
         injector: Injector,
         public _l2MessageService: L2MessagesServiceProxy) {
         super(injector);
-        console.log("!!! L2TaskComponent > constructor() >>  ");
-        
+        //this.update();
     }
-
     ngOnInit(): void {
-        this.getMessageHistory();
+        this.update();
         this.uMSG = 'This is jus a basic!';
-        /*this.observable = Observable.create(observer => {
-            observer.next(this.chatHistory);
-    });
-    this.observable.subscribe(chatHistory => this.chatHistory = chatHistory);*/
     }
 
     sendMSGEvent() {
         const m = new SendMessageDto();
         m.initString(this.uMSG);
-        //try to post
-        this._l2MessageService.sendMSG(m).subscribe(
+        
+        this._l2MessageService.sendMSG(m).pipe(
+            finalize(() => {
+                this.update();
+            })
+        ).subscribe(
             () => {
                 this.notify.info(this.l('SavedSuccessfully'));
-            },
-            () => {
-                this.getstartedEV = "false";
             }
         );
-        this.getMessageHistory();
         return this.uMSG;
     }
 
-    getMessageHistory(){
-        this._l2MessageService.getAllMSG().subscribe(root => {
-            this.chatHistory = root.result; 
+    getMessageHistory() {
+        this._l2MessageService.getAllMSG().pipe().subscribe(root => {
+            this.history = root.result;
         });
     }
-    //ToDo>> remove this solution
-    updateHistory() {
+    getHistory() {
+        this._l2MessageService.getMessageHistory().subscribe(root => {
+            this.history = root.items;
+        });
+    }
+    //ToDo>> modify this solution
+    update() {
         this.getMessageHistory();
+        //this.getHistory();
     }
 }
+
+

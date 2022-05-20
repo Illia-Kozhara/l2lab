@@ -16,6 +16,7 @@ import { HomeComponent } from '@app/home/home.component';
 import { AboutComponent } from '@app/about/about.component';
 // study
 import { L2TaskComponent } from '@app/L2Task/L2Task.component';
+import { MessageHistoryComponent } from './L2Task/message-history-component/message-history.component';
 
 // tenants
 import { TenantsComponent } from '@app/tenants/tenants.component';
@@ -49,7 +50,8 @@ import { SidebarMenuComponent } from './layout/sidebar-menu.component';
     HomeComponent,
     AboutComponent,
     // study
-    L2TaskComponent,
+        L2TaskComponent,
+        MessageHistoryComponent,
     // tenants
     TenantsComponent,
     CreateTenantDialogComponent,
@@ -74,6 +76,7 @@ import { SidebarMenuComponent } from './layout/sidebar-menu.component';
     SidebarLogoComponent,
     SidebarUserPanelComponent,
     SidebarMenuComponent,
+    MessageHistoryComponent,
     
   ],
   imports: [
