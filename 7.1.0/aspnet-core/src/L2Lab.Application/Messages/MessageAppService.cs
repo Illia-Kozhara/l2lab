@@ -17,8 +17,6 @@ namespace L2Lab.Messages
     {
         private readonly IRepository<L2LabMessage> _l2LabRepository;
         
-
-
         public MessageAppService(IRepository<L2LabMessage> l2LabRepository)
             : base(l2LabRepository)
         {
@@ -33,17 +31,32 @@ namespace L2Lab.Messages
             var message = new L2LabMessage { MSGText = input.MsgText };
             _l2LabRepository.Insert(message);
         }
-
-        public Task <List<L2LabMessage>> GetMessages()
+        public List<L2LabMessage> GetMessages()
         {
-            var messages = _l2LabRepository.GetAllListAsync();
+            var messages = _l2LabRepository.GetAllList();
             return messages;
             //throw new NotImplementedException();
+        }
+        public L2LabMessage GetMessage(int id) { 
+            var message = _l2LabRepository.Get(id);
+            return message;
+        }
+        public void DeleteMessage(int id)
+        {
+            _l2LabRepository.Delete(id);
+        }
+        public L2LabMessage UpdateMessage(L2LabMessage m)
+        {
+            var message = _l2LabRepository.Get(m.Id);
+            message.MSGText = m.MSGText;
+            message.CreationTime = DateTime.Now;
+            return _l2LabRepository.Update(message);
         }
         public async Task<ListResultDto<MMessageDto>> GetMessageHistory()
         {
             var roles = await _l2LabRepository.GetAllListAsync();
             return new ListResultDto<MMessageDto>(ObjectMapper.Map<List<MMessageDto>>(roles));
         }
+
     }
 }

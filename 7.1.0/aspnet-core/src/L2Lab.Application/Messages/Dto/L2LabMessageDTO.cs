@@ -11,7 +11,6 @@ using System.Threading.Tasks;
 
 namespace L2Lab.Messages.Dto
 {
-    [AutoMap(typeof(L2LabMessage))]
     public class L2LabMessageDto : EntityDto<int>, IHasCreationTime
     {
         [Required]

@@ -10,7 +10,7 @@ namespace L2Lab.EntityFrameworkCore
     {
         /* Define a DbSet for each entity of the application */
         public DbSet<L2LabMessage> L2LabMessages { get; set; }
-        //ToDo add entity!!
+        
         public L2LabDbContext(DbContextOptions<L2LabDbContext> options)
             : base(options)
         {
