@@ -12,14 +12,19 @@ namespace L2Lab.Messages
 {
     public interface IMessageAppService : IAsyncCrudAppService<L2LabMessageDto>, IApplicationService
     {
-        //Non generic
+        //Non async
         void AddMessage(CreateMessageInput input);
         List<L2LabMessage> GetMessages();
-        public L2LabMessage GetMessage(int id);
+        public L2LabMessage GetMessageById(int id);
         public void DeleteMessage(int id);
         public L2LabMessage UpdateMessage(L2LabMessage m);
-        //Generic
-        Task<ListResultDto<MMessageDto>> GetMessageHistory();
+        //async
+        Task<ListResultDto<MMessageDto>> GetMessagesAsync();
+        Task<L2LabMessage> AddMessageAsync(CreateMessageInput input);
+        Task<L2LabMessage> GetMessageByIdAsync(int id);
+        Task DeleteMessageAsync(int id);
+        Task<L2LabMessage> UpdateMessageAsync(L2LabMessage m);
+
 
     }
 }

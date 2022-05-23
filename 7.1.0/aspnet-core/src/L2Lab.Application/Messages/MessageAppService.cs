@@ -21,13 +21,10 @@ namespace L2Lab.Messages
             : base(l2LabRepository)
         {
             this._l2LabRepository = l2LabRepository;
-            //_l2LabRepository = l2LabRepository;
     }
 
         public void AddMessage(CreateMessageInput input)
         {
-            //just example
-            //var msg = ObjectMapper.Map<L2LabMessage>(input);
             var message = new L2LabMessage { MSGText = input.MsgText };
             _l2LabRepository.Insert(message);
         }
@@ -37,7 +34,7 @@ namespace L2Lab.Messages
             return messages;
             //throw new NotImplementedException();
         }
-        public L2LabMessage GetMessage(int id) { 
+        public L2LabMessage GetMessageById(int id) { 
             var message = _l2LabRepository.Get(id);
             return message;
         }
@@ -54,9 +51,37 @@ namespace L2Lab.Messages
         }
         public async Task<ListResultDto<MMessageDto>> GetMessageHistory()
         {
-            var roles = await _l2LabRepository.GetAllListAsync();
-            return new ListResultDto<MMessageDto>(ObjectMapper.Map<List<MMessageDto>>(roles));
+            var messages = await _l2LabRepository.GetAllListAsync();
+            return new ListResultDto<MMessageDto>(ObjectMapper.Map<List<MMessageDto>>(messages));
+        }
+        public async Task<L2LabMessage> AddMessageAsync(CreateMessageInput input)
+        {
+            var message = new L2LabMessage { MSGText = input.MsgText };
+            return await _l2LabRepository.InsertAsync(message);
+            
         }
 
+        public Task<ListResultDto<MMessageDto>> GetMessagesAsync()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<L2LabMessage> GetMessageByIdAsync(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task DeleteMessageAsync(int id)
+        {
+            await _l2LabRepository.DeleteAsync(id);
+        }
+
+        public async Task<L2LabMessage> UpdateMessageAsync(L2LabMessage m)
+        {
+            var message = await _l2LabRepository.GetAsync(m.Id);
+            message.MSGText = m.MSGText;
+            message.CreationTime = DateTime.Now;
+            return (await _l2LabRepository.UpdateAsync(message));
+        }
     }
 }
